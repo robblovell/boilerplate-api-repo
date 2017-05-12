@@ -1,0 +1,15 @@
+#!/bin/bash
+
+DEP_NAME=deployment/gateway-deployment
+URL=https://storage.googleapis.com/kubernetes-release/release/v1.6.2/bin/linux/amd64/kubectl
+ln -s /usr/bin/kubectl.v1.6.2 /usr/bin/kubectl
+curl -LO $URL
+chmod +x ./kubectl
+KUBECTL="./kubectl --kubeconfig ./kubeconfig --namespace $KUBERNETES_NAMESPACE"
+
+if ! $KUBECTL rollout status $DEP_NAME
+  then
+    echo 'Failed, rolling back'
+    $KUBECTL rollout undo $DEP_NAME
+    exit 1
+fi

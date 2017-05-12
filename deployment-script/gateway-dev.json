@@ -1,0 +1,57 @@
+{
+  "containerDefinitions": [
+    {
+      "image": "419539186404.dkr.ecr.us-east-1.amazonaws.com/gateway:v_%BUILD_NUMBER%",
+      "name": "gateway-dev",
+      "cpu": 10,
+      "memory": 516,
+      "essential": true,
+      "portMappings": [
+        {
+          "protocol": "tcp",
+          "containerPort": 3000,
+          "hostPort": 8105
+        }
+      ],
+      "environment": [
+        {
+          "name": "environment",
+          "value": "dev"
+        },
+        {
+          "name": "service",
+          "value": "gateway"
+        },
+        {
+          "name": "NODE_ENV",
+          "value": "dev"
+        },
+        {
+          "name": "DB",
+          "value": "%DB%"
+        },
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "value": "%AWS_ACCESS_KEY_ID%"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "value": "%AWS_SECRET_ACCESS_KEY%"
+        },
+        {
+          "name": "REX_PASSWORD",
+          "value": "%REX_PASSWORD%"
+        },
+        {
+          "name": "REX_TEST_PASSWORD",
+          "value": "%REX_TEST_PASSWORD%"
+        },
+        {
+          "name": "AWS_REGION",
+          "value": "us-east-1"
+        }
+      ]
+    }
+  ],
+  "family": "gateway-dev"
+}

@@ -1,0 +1,92 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gateway-deployment
+  labels:
+    buildVersion: "#{Build.BuildID}#"
+    releaseVersion: "#{Release.ReleaseName}#"
+spec:
+  replicas: #{gatewayReplicas}#
+  progressDeadlineSeconds: 300
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+        buildVersion: "#{Build.BuildID}#"
+        releaseVersion: "#{Release.ReleaseName}#"
+    spec:
+      containers:
+      - name: gateway
+        image: gateway.azurecr.io/gateway-service:#{Build.BuildID}#
+        ports:
+        - containerPort: 3000
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        env:
+        - name: environment
+          value: #{environment}#
+        - name: service
+          value: #{service}#
+        - name: NODE_ENV
+          value: #{NODE_ENV}#
+        - name: DB
+          value: "#{DB}#"
+        - name: AWS_ACCESS_KEY_ID
+          value: "#{AWS_ACCESS_KEY_ID}#"
+        - name: AWS_SECRET_ACCESS_KEY
+          value: "#{AWS_SECRET_ACCESS_KEY}#"
+        - name: REX_PASSWORD
+          value: "#{REX_PASSWORD}#"
+        - name: REX_TEST_PASSWORD
+          value: "#{REX_TEST_PASSWORD}#"
+        - name: AWS_REGION
+          value: "#{AWS_REGION}#"
+        - name: EXTERNAL_PORT
+          value: "#{EXTERNAL_PORT}#"
+        - name: HOST
+          value: "#{HOST}#"
+        - name: SCHEME
+          value: "#{SCHEME}#"
+        - name: RAVEN_KEY
+          value: "#{RAVEN_KEY}#"
+        - name: FEDEX_ENV
+          value: "#{FEDEX_ENV}#"
+        - name: FEDEX_KEY
+          value: "#{FEDEX_KEY}#"
+        - name: FEDEX_PASSWORD
+          value: "#{FEDEX_PASSWORD}#"
+        - name: FEDEX_ACCOUNT_NUMBER
+          value: "#{FEDEX_ACCOUNT_NUMBER}#"
+        - name: FEDEX_METER_NUMBER
+          value: "#{FEDEX_METER_NUMBER}#"
+        - name: FEDEX_SANDBOX_KEY
+          value: "#{FEDEX_SANDBOX_KEY}#"
+        - name: FEDEX_SANDBOX_ENV
+          value: "#{FEDEX_SANDBOX_ENV}#"
+        - name: FEDEX_SANDBOX_PASSWORD
+          value: "#{FEDEX_SANDBOX_PASSWORD}#"
+        - name: FEDEX_SANDBOX_ACCOUNT_NUMBER
+          value: "#{FEDEX_SANDBOX_ACCOUNT_NUMBER}#"
+        - name: FEDEX_SANDBOX_METER_NUMBER
+          value: "#{FEDEX_SANDBOX_METER_NUMBER}#"
+        - name: SALESFORCE_SECRET
+          value: "#{SALESFORCE_SECRET}#"
+        - name: CS_LIVE_BEARER
+          value: "#{CS_LIVE_BEARER}#"
+        - name: CS_TEST_BEARER
+          value: "#{CS_TEST_BEARER}#"
+        - name: KUBERNETES_NAMESPACE
+          value: "#{KUBERNETES_NAMESPACE}#"
+        - name: GATEWAY_HOST_NAME
+          value: "#{GATEWAY_HOST_NAME}#"
+        - name: LOGGLY_KEY
+          value: "#{LOGGLY_KEY}#"
+      imagePullSecrets:
+      - name: gateway-azurecr

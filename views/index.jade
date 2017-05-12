@@ -1,0 +1,43 @@
+extends layout
+
+block content
+  h1= title + " " + url
+  p Stores a network to use with routing algorithms that calculate a set of routes with minimal cost and time for delivery.
+
+  h2= "Setup"
+  p Install mongoDB locally with no username and password, port 27017.
+
+  p Install utilities, you will need gulp and coffeescript installed globally:
+
+  pre npm install gulp -g
+    | npm install coffee-script -g.
+
+  p Load dependencies:
+
+  pre npm install
+    | npm run build
+
+  h2="Test (currently none written)"
+  pre npm test
+
+  h2="Configuration"
+  p The file config/configuration.coffee will connect to a
+    | local mongodb and neo4j database with no environment variables set.
+  p With NODE_ENV='test', the config/configuration.coffee will connect to an Azure development
+    | environment. See config/configuration.coffee for more details.
+  p Other environments require that environment variables set in config/configuration.coffee be set.
+    | Particularlly: NODE_ENV, DB, NEO4J_URL, HOST, PORT, and SCHEME (the last three are for swagger).
+
+  h2= "Start server"
+
+  pre npm start
+
+  h4= "Server at: "
+    a(href="#{url}") #{url}
+
+  h4= "Ping at: "
+    a(href="#{url+'ping'}") #{url+'ping'}
+
+  h4= "Swagger documentation is at: "
+    a(href="#{url+'docs/index.html'}") #{url+'docs/index.html'}
+

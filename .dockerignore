@@ -1,0 +1,6 @@
+.nyc_output
+artifacts
+test_functional
+test_integration
+test-reports.xml
+node_modules

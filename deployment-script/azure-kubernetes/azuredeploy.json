@@ -1,0 +1,44 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "docdbName": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "Full name of location to deploy database to."
+            }
+        }
+    },
+    "variables": {
+        "locationShort": "[replace(toLower(parameters('location')), ' ', '')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2015-04-08",
+            "kind": "MongoDB",
+            "type": "Microsoft.DocumentDB/databaseAccounts",
+            "name": "[parameters('docdbName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "name": "[parameters('docdbName')]",
+                "databaseAccountOfferType": "Standard",
+                "locations": [
+                    {
+                        "id": "[concat(parameters('docdbName'), '-', variables('locationShort'))]",
+                        "failoverPriority": 0,
+                        "locationName": "[parameters('location')]"
+                    }
+                ]
+            }
+        }
+    ],
+    "outputs": {
+        "docdbKey": {
+            "type": "string",
+            "value": "[listKeys(resourceId('Microsoft.DocumentDb/databaseAccounts', parameters('docdbName')), '2015-04-08').primaryMasterKey]"
+        }
+    }
+}
